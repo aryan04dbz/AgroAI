@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGR AI - Result</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(183, 204, 195, 0.3)), 
+                        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2532&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: linear-gradient(to right, #b7ccc3, #d5e5e0);
+        }
+
+        .logo {
+            width: 100px;
+            height: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #006B5E;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #004a41;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            flex: 1;
+        }
+
+        .result-section {
+            text-align: center;
+        }
+
+        .result-line {
+            width: 300px;
+            height: 2px;
+            background: #006B5E;
+            margin: 1rem auto;
+            position: relative;
+        }
+
+        .result-line::before, .result-line::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #006B5E;
+            border-radius: 50%;
+            top: -4px;
+        }
+
+        .result-line::before {
+            left: -5px;
+        }
+
+        .result-line::after {
+            right: -5px;
+        }
+
+        .wheat-image {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            margin: 1rem 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #b7ccc3, #d5e5e0);
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .analysis-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            text-align: left;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            margin: 1rem 0;
+            color: #006B5E;
+        }
+
+        h3 {
+            color: #006B5E;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer {
+            background: linear-gradient(to right, #b7ccc3, #d5e5e0);
+            padding: 1rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer p {
+            color: #006B5E;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #006B5E;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="/api/placeholder/100/40" alt="AGR AI Logo" class="logo">
+        <nav class="nav-links">
+            <a href="#">HOME</a>
+            <a href="#">ABOUT</a>
+            <a href="#">CONTACT US</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="result-section">
+            <h1>Result</h1>
+            <div class="result-line"></div>
+            <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=2670&auto=format&fit=crop" 
+                 alt="Wheat" class="wheat-image">
+            <h2>Wheat</h2>
+
+            <div class="stats-container">
+                <div class="stat-box">
+                    <h3>Expected yeild</h3>
+                    <p>4,500 hg/ha</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Yeild percentage</h3>
+                    <p>85% yeild</p>
+                </div>
+            </div>
+
+            <div class="analysis-box">
+                <h3>Analysis</h3>
+                <p>Analysing the data you have given and considering the weather, tempreture, rainfall expected in your area...It is expected for you to get 4,500hg/ha i.e 85% of your farm's production.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2025 AGR AI. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Support</a>
+        </div>
+    </footer>
+</body>
+</html>

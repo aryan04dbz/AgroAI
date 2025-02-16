@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGRO.AI - Crop Yield Prediction</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+                        url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=2940&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: rgba(174, 232, 166, 0.95) !important;
+            border-radius: 0 0 1rem 1rem;
+        }
+
+        .logo {
+            color: #006B54;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logo-ai {
+            background-color: #E6E6FA;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.3rem;
+        }
+
+        .prediction-form {
+            background-color: rgba(242, 254, 239, 0.95);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 500px;
+            margin: 2rem auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            position: relative;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            color: #333;
+        }
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 2px;
+            background: #000;
+        }
+
+        .form-control {
+            background-color: rgba(190, 215, 209, 0.3);
+            border: none;
+            padding: 0.8rem 1rem;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Remove arrows/spinners from number inputs */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .predict-btn {
+            background-color: #34D399;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 2rem;
+            color: white;
+            font-size: 1rem;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .predict-btn:hover {
+            background-color: #2ebb85;
+        }
+
+        footer {
+            background-color: rgba(174, 232, 166, 0.95);
+            padding: 1rem 0;
+            margin-top: auto;
+            text-align: center;
+            color: #006B54;
+            font-size: 0.9rem;
+        }
+
+        .content-wrapper {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand logo" href="#">
+                AGRO<span class="logo-ai">AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">ABOUT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">CONTACT US</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        
+        <div class="container">
+            <form class="prediction-form">
+                <h2 class="form-title">Crop Yield Prediction</h2>
+                
+                <div class="mb-3">
+                    <label for="cropName" class="form-label">Enter crop name</label>
+                    <input type="text" class="form-control" id="cropName" placeholder="cotton/wheat/rice">
+                </div>
+
+                <div class="mb-3">
+                    <label for="year" class="form-label">Year</label>
+                    <input type="number" class="form-control" id="year" placeholder="2025" min="2000" max="2100">
+                </div>
+
+                <div class="mb-3">
+                    <label for="rainfall" class="form-label">Average Rainfall (mm)</label>
+                    <input type="number" class="form-control" id="rainfall" placeholder="750" step="0.1">
+                </div>
+
+                <div class="mb-3">
+                    <label for="fertilizer" class="form-label">Fertilizer used</label>
+                    <input type="text" class="form-control" id="fertilizer" placeholder="4.53kgs">
+                </div>
+
+                <div class="mb-3">
+                    <label for="pesticides" class="form-label">Pesticides used</label>
+                    <input type="text" class="form-control" id="pesticides" placeholder="300ml">
+                </div>
+
+                <div class="mb-3">
+                    <label for="area" class="form-label">Area of field</label>
+                    <input type="text" class="form-control" id="area" placeholder="1000 sq.feet">
+                </div>
+
+                <button type="submit" class="predict-btn">
+                    Predict
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="container">
+            <p class="mb-0">© 2025 AGRO AI - Empowering Agriculture with Intelligence</p>
+            </small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = {
+                cropName: document.getElementById('cropName').value,
+                year: document.getElementById('year').value,
+                rainfall: document.getElementById('rainfall').value,
+                fertilizer: document.getElementById('fertilizer').value,
+                pesticides: document.getElementById('pesticides').value,
+                area: document.getElementById('area').value
+            };
+            
+        
+            console.log('Prediction requested with data:', formData);
+        });
+    </script>
+</body>
+</html>

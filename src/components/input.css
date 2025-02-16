@@ -1,0 +1,105 @@
+body {
+    background: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+                url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=2940&auto=format&fit=crop') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    background-color: rgba(174, 232, 166, 0.95) !important;
+    border-radius: 0 0 1rem 1rem;
+}
+
+.logo {
+    color: #006B54;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.logo-ai {
+    background-color: #E6E6FA;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
+}
+
+.prediction-form {
+    background-color: rgba(242, 254, 239, 0.95);
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 500px;
+    margin: 2rem auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    position: relative;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.form-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: #000;
+}
+
+.form-control {
+    background-color: rgba(190, 215, 209, 0.3);
+    border: none;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Remove arrows/spinners from number inputs */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.form-label {
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.predict-btn {
+    background-color: #34D399;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 2rem;
+    color: white;
+    font-size: 1rem;
+    width: 100%;
+    transition: background-color 0.2s;
+}
+
+.predict-btn:hover {
+    background-color: #2ebb85;
+}
+
+footer {
+    background-color: rgba(174, 232, 166, 0.95);
+    padding: 1rem 0;
+    margin-top: auto;
+    text-align: center;
+    color: #006B54;
+    font-size: 0.9rem;
+}
+
+.content-wrapper {
+    flex: 1;
+}
