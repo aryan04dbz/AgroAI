@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmDirect - Farm Fresh Delivered</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50; /* Green */
+            --primary-dark: #388E3C;
+            --secondary-color: #ff9800; /* Orange accent */
+            --light-gray: #f4f4f4;
+            --medium-gray: #ddd;
+            --dark-gray: #777;
+            --text-color: #333;
+            --white-color: #fff;
+            --border-radius: 6px;
+            --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            --box-shadow-hover: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #fcfcfc;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        img { max-width: 100%; height: auto; display: block; }
+
+        a { color: var(--primary-dark); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        h1, h2, h3, h4 { margin-bottom: 0.7em; color: var(--primary-dark); font-weight: 600;}
+        h1 { font-size: 2.2rem; }
+        h2 { font-size: 1.8rem; }
+        h3 { font-size: 1.4rem; }
+        h4 { font-size: 1.1rem; color: var(--text-color); }
+
+
+        section { padding: 2.5rem 0; }
+        section:nth-child(odd):not(.pincode-check):not(#product-detail-view) { background-color: var(--white-color); }
+        section:nth-child(even):not(.pincode-check):not(#product-detail-view) { background-color: #f9fbf9; }
+
+
+        .hidden { display: none !important; }
+
+        .main-header {
+            background-color: var(--white-color);
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--medium-gray);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: var(--primary-color); }
+        .header-actions { display: flex; align-items: center; gap: 1rem; }
+        .main-nav ul { list-style: none; display: flex; gap: 1.8rem; }
+        .main-nav a { color: var(--text-color); font-weight: 500; transition: color 0.2s ease; }
+        .main-nav a:hover { color: var(--primary-color); text-decoration: none; }
+
+
+        .pincode-check {
+            background: #e8f5e9;
+            padding: 0.8rem 0;
+            text-align: center;
+            border-bottom: 1px solid #c8e6c9;
+        }
+        .pincode-check label { margin-right: 0.5rem; font-weight: 500; font-size: 0.95rem;}
+        .pincode-check input[type="text"] {
+            padding: 0.6rem;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
+            width: 130px;
+            margin-right: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color); color: var(--white-color);
+            padding: 0.7em 1.4em; border: none; border-radius: var(--border-radius);
+            cursor: pointer; text-align: center; font-size: 0.95rem; font-weight: 500;
+            transition: background-color 0.2s ease, transform 0.1s ease; white-space: nowrap;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .btn:hover { background-color: var(--primary-dark); text-decoration: none; color: var(--white-color); transform: translateY(-1px); }
+        .btn:active { transform: translateY(0px); }
+
+        .btn-secondary { background-color: #6c757d; }
+        .btn-secondary:hover { background-color: #5a6268; }
+        .btn-info { background-color: #17a2b8; }
+        .btn-info:hover { background-color: #138496; }
+        .btn-danger { background-color: #dc3545; }
+        .btn-danger:hover { background-color: #c82333; }
+        .btn-warning { background-color: var(--secondary-color); }
+        .btn-warning:hover { background-color: #e68a00; }
+        .btn-sm { padding: 0.5em 1em; font-size: 0.85rem; }
+
+        .category-btn {
+            background-color: var(--white-color); color: var(--text-color);
+            margin-right: 0.6rem; margin-bottom: 0.6rem; border: 1px solid var(--medium-gray);
+            box-shadow: none;
+        }
+        .category-btn:hover { background-color: var(--light-gray); color: var(--text-color); }
+        .category-btn.active {
+            background-color: var(--primary-dark); color: var(--white-color);
+            border-color: var(--primary-dark);
+        }
+
+        .category-filters { margin-bottom: 2rem; border-bottom: 1px dashed var(--medium-gray); padding-bottom: 1rem;}
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.8rem; }
+        .product-card {
+            background-color: var(--white-color); border: 1px solid #e0e0e0; border-radius: var(--border-radius);
+            overflow: hidden; box-shadow: var(--box-shadow);
+            transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer;
+            display: flex; flex-direction: column;
+        }
+        .product-card:hover { transform: translateY(-4px); box-shadow: var(--box-shadow-hover); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border-bottom: 1px solid #eee;}
+        .product-info { padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column;}
+        .product-info h4 { font-size: 1.15rem; margin-bottom: 0.4em; color: var(--text-color); }
+        .product-category { font-size: 0.8rem; color: var(--dark-gray); margin-bottom: 0.5em; text-transform: uppercase; letter-spacing: 0.5px; }
+        .product-farmer { font-size: 0.9rem; color: var(--dark-gray); margin-bottom: 0.8em; display: flex; align-items: center; gap: 0.3em;}
+        .product-farmer::before { content: '👤'; font-size: 0.9em; }
+        .product-price { font-size: 1.1rem; font-weight: 600; color: var(--primary-dark); margin-top: auto; }
+
+        #product-detail-view { padding: 2rem; background-color: var(--white-color); border-radius: var(--border-radius); border: 1px solid #e0e0e0; margin-top: 1rem; }
+        .product-detail-content { display: grid; grid-template-columns: 1fr 1.2fr; gap: 2.5rem; align-items: start; }
+        .product-detail-image img { border-radius: var(--border-radius); border: 1px solid #eee; }
+        .product-detail-info h2 { margin-top: 0; color: var(--text-color); font-size: 1.9rem; }
+        .detail-category { font-size: 0.9rem; color: var(--dark-gray); margin-bottom: 0.8em; text-transform: uppercase; letter-spacing: 0.5px; }
+        .detail-price { font-size: 1.6rem; font-weight: 700; color: var(--primary-color); margin-bottom: 1.2rem; }
+        .detail-farmer { margin-bottom: 1.2rem; font-size: 1rem; display: flex; align-items: center; gap: 0.4em;}
+        .detail-farmer::before { content: '👤'; font-size: 1em; }
+        .detail-farmer strong { font-weight: 600; }
+        .detail-description { color: var(--dark-gray); margin-bottom: 2rem; line-height: 1.7; }
+        #back-to-products { margin-bottom: 2.5rem; background-color: var(--dark-gray); }
+        #back-to-products:hover { background-color: #555; }
+        .detail-actions .btn { margin-right: 0.8rem;}
+
+
+        .join-farmer { background-color: #e8f5e9; text-align: center; border-radius: var(--border-radius); padding: 3rem 1.5rem; }
+        .join-farmer h2 { color: var(--primary-dark); }
+        .join-farmer p { max-width: 700px; margin: 0 auto 1.5rem auto; color: #333; }
+        .join-farmer ul { list-style: none; padding-left: 0; display: inline-block; text-align: left; margin-top: 1rem; margin-bottom: 2rem; max-width: 500px;}
+        .join-farmer li { margin-bottom: 0.8rem; padding-left: 1.5rem; position: relative; }
+        .join-farmer li::before {
+            content: '✔';
+            color: var(--primary-dark);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+
+        #farmer-view h2 { border-bottom: 2px solid var(--primary-color); display: inline-block; padding-bottom: 0.3rem; margin-bottom: 1.5rem;}
+        .dashboard-nav { margin-bottom: 2rem; }
+        .dashboard-nav ul { list-style: none; display: flex; gap: 1rem; flex-wrap: wrap; padding: 1rem; background-color: var(--light-gray); border-radius: var(--border-radius); }
+
+        .dashboard-content {
+            background-color: var(--white-color); padding: 2rem;
+            border-radius: var(--border-radius); border: 1px solid var(--medium-gray);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .dashboard-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background-color: var(--light-gray); padding: 1.5rem; border-radius: var(--border-radius); text-align: center; border: 1px solid #e0e0e0;}
+        .stat-card h4 { margin-bottom: 0.5rem; color: var(--primary-dark); }
+        .stat-value { font-size: 1.8rem; font-weight: 600; color: var(--text-color); }
+        .stat-label { font-size: 0.9rem; color: var(--dark-gray); }
+
+
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 0.6rem; font-weight: 600; color: #555; font-size: 0.95rem; }
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group input[type="date"],
+        .form-group input[type="file"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%; padding: 0.8rem; border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius); font-size: 1rem; transition: border-color 0.2s ease;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-color); outline: none; box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        .form-group textarea { min-height: 100px; line-height: 1.5; }
+        .prediction-result {
+            margin-top: 1.5rem; background-color: #e8f5e9; border: 1px solid #c8e6c9;
+            min-height: 50px; display: flex; align-items: center; justify-content: center;
+            font-weight: 600; color: var(--primary-dark); padding: 1rem; border-radius: var(--border-radius);
+        }
+
+
+        .main-footer { background-color: #343a40; color: #eee; text-align: center; padding: 2rem 0; margin-top: 3rem; font-size: 0.9rem; }
+        .main-footer p { margin-bottom: 0.5rem; }
+        .main-footer a { color:#ced4da; }
+
+
+        @media (max-width: 992px) {
+            .product-detail-content { grid-template-columns: 1fr; }
+            .product-detail-image { margin-bottom: 1.5rem; max-width: 400px; margin-left: auto; margin-right: auto;}
+            .container { padding: 0 15px; }
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 1.9rem; }
+            h2 { font-size: 1.6rem; }
+            .main-header .container { flex-direction: column; align-items: center; }
+            .main-nav ul { margin-top: 1rem; padding-left: 0; justify-content: center; gap: 1.5rem; }
+            .header-actions { margin-top: 0.5rem; }
+            .dashboard-nav ul { justify-content: center; }
+             .pincode-check { padding: 1rem 15px; }
+        }
+        @media (max-width: 480px) {
+            .logo { font-size: 1.5rem; }
+            .main-nav li { margin-left: 0.8rem; }
+            .pincode-check { display: flex; flex-direction: column; align-items: stretch; }
+            .pincode-check label { margin-bottom: 0.5rem; }
+            .pincode-check input[type="text"] { margin: 0 0 0.5rem 0; width: 100%; }
+            .pincode-check .btn { width: 100%; }
+            .product-grid { grid-template-columns: 1fr; }
+            .btn { width: 100%; margin-bottom: 0.5rem; }
+             .header-actions .btn { width: auto; margin-bottom: 0; }
+             .dashboard-nav ul { flex-direction: column; gap: 0.5rem; }
+             .dashboard-nav .btn { width: 100%; }
+             .detail-actions .btn { width: auto; margin-bottom: 0.5rem;}
+             .category-filters .btn { width: auto; margin-bottom: 0.5rem;}
+             section { padding: 2rem 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">FarmDirect 🌱</div>
+            <div class="header-actions">
+                 <nav class="main-nav">
+                    <ul>
+                        <li><a href="#home" onclick="showView('consumer-view', true)">Home</a></li>
+                        <li><a href="#products-section">Products</a></li>
+                        <li><a href="#join">Join Us</a></li>
+                        <li><a href="#" title="Shopping Cart">🛒 (0)</a></li>
+                    </ul>
+                </nav>
+                <button id="farmer-login-toggle" class="btn btn-secondary btn-sm">Farmer Login</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="pincode-check">
+        <div class="container">
+             <label for="pincode-input">Check Delivery Area:</label>
+             <input type="text" id="pincode-input" placeholder="Enter Pincode" maxlength="6">
+             <button id="pincode-check-btn" class="btn btn-sm">Check</button>
+        </div>
+    </section>
+
+    <main class="container" id="main-content">
+
+        <div id="consumer-view">
+
+            <section id="products-section">
+                <h2>Explore Fresh Produce</h2>
+                <div class="category-filters">
+                    <button class="btn category-btn btn-sm active" onclick="filterProducts('all')">All</button>
+                    <button class="btn category-btn btn-sm" onclick="filterProducts('vegetable')">Vegetables</button>
+                    <button class="btn category-btn btn-sm" onclick="filterProducts('fruit')">Fruits</button>
+                    <button class="btn category-btn btn-sm" onclick="filterProducts('grain')">Grains</button>
+                    <button class="btn category-btn btn-sm" onclick="filterProducts('dairy')">Dairy</button>
+                    <button class="btn category-btn btn-sm" onclick="filterProducts('spice')">Spices</button>
+                </div>
+
+                <div class="product-grid" id="product-listing">
+
+                    <div class="product-card" data-category="vegetable" onclick="showProductDetail({ id: 1, name: 'Organic Tomatoes', category: 'Vegetable', price: '₹55 / kg', farmer: 'Ram Singh', image: 'https://placehold.co/600x400/FF7E79/333?text=Tomatoes', description: 'Plump, juicy organic tomatoes bursting with flavour. Grown sustainably near Kharagpur. Ideal for salads, sauces, or just eating fresh.' })">
+                        <img src="https://placehold.co/600x400/FF7E79/333?text=Tomatoes" alt="Fresh Tomatoes">
+                        <div class="product-info">
+                            <h4>Organic Tomatoes</h4>
+                            <p class="product-category">Vegetable</p>
+                            <p class="product-farmer">Ram Singh</p>
+                            <p class="product-price">₹55 / kg</p>
+                        </div>
+                    </div>
+                    <div class="product-card" data-category="vegetable" onclick="showProductDetail({ id: 2, name: 'Sweet Carrots', category: 'Vegetable', price: '₹45 / kg', farmer: 'Sita Devi', image: 'https://placehold.co/600x400/FFAF61/333?text=Carrots', description: 'Crisp, naturally sweet carrots harvested at peak freshness. Perfect for snacking, cooking, or adding color to your meals.' })">
+                        <img src="https://placehold.co/600x400/FFAF61/333?text=Carrots" alt="Carrots">
+                        <div class="product-info">
+                            <h4>Sweet Carrots</h4>
+                            <p class="product-category">Vegetable</p>
+                            <p class="product-farmer">Sita Devi</p>
+                            <p class="product-price">₹45 / kg</p>
+                        </div>
+                    </div>
+                     <div class="product-card" data-category="fruit" onclick="showProductDetail({ id: 3, name: 'Seasonal Mangoes (Langra)', category: 'Fruit', price: '₹130 / kg', farmer: 'Bengal Orchards', image: 'https://placehold.co/600x400/FFF176/333?text=Mangoes', description: 'Deliciously sweet and fibrous Langra mangoes, a seasonal favourite from local orchards. Limited stock available.' })">
+                        <img src="https://placehold.co/600x400/FFF176/333?text=Mangoes" alt="Mangoes">
+                        <div class="product-info">
+                            <h4>Seasonal Mangoes (Langra)</h4>
+                            <p class="product-category">Fruit</p>
+                            <p class="product-farmer">Bengal Orchards</p>
+                            <p class="product-price">₹130 / kg</p>
+                        </div>
+                    </div>
+                    <div class="product-card" data-category="grain" onclick="showProductDetail({ id: 4, name: 'Aged Basmati Rice', category: 'Grain', price: '₹95 / kg', farmer: 'Punjab Harvest Co.', image: 'https://placehold.co/600x400/f5f5f5/444?text=Basmati+Rice', description: 'Premium long-grain Basmati rice, carefully aged for over a year to enhance its distinct aroma and fluffy texture upon cooking.' })">
+                        <img src="https://placehold.co/600x400/f5f5f5/444?text=Basmati+Rice" alt="Basmati Rice">
+                        <div class="product-info">
+                            <h4>Aged Basmati Rice</h4>
+                             <p class="product-category">Grain</p>
+                            <p class="product-farmer">Punjab Harvest Co.</p>
+                            <p class="product-price">₹95 / kg</p>
+                        </div>
+                    </div>
+                     <div class="product-card" data-category="vegetable" onclick="showProductDetail({ id: 5, name: 'Fresh Spinach Bunch', category: 'Vegetable', price: '₹35 / bunch', farmer: 'Green Valley Farms', image: 'https://placehold.co/600x400/AED581/333?text=Spinach', description: 'Tender green spinach leaves, packed with nutrients. Locally sourced and delivered fresh for maximum taste and health benefits.' })">
+                        <img src="https://placehold.co/600x400/AED581/333?text=Spinach" alt="Spinach">
+                        <div class="product-info">
+                            <h4>Fresh Spinach Bunch</h4>
+                            <p class="product-category">Vegetable</p>
+                            <p class="product-farmer">Green Valley Farms</p>
+                            <p class="product-price">₹35 / bunch</p>
+                        </div>
+                    </div>
+                    <div class="product-card" data-category="dairy" onclick="showProductDetail({ id: 6, name: 'Farm Fresh Paneer', category: 'Dairy', price: '₹120 / 250g', farmer: 'Gopal Dairy', image: 'https://placehold.co/600x400/E1F5FE/444?text=Paneer', description: 'Soft and creamy Malai Paneer made from fresh, full-cream milk sourced directly from local farms. Excellent for curries and grilling.' })">
+                        <img src="https://placehold.co/600x400/E1F5FE/444?text=Paneer" alt="Paneer">
+                        <div class="product-info">
+                            <h4>Farm Fresh Paneer</h4>
+                            <p class="product-category">Dairy</p>
+                            <p class="product-farmer">Gopal Dairy</p>
+                            <p class="product-price">₹120 / 250g</p>
+                        </div>
+                    </div>
+                    <div class="product-card" data-category="spice" onclick="showProductDetail({ id: 7, name: 'Sundried Turmeric Powder', category: 'Spice', price: '₹70 / 100g', farmer: 'Spice Routes Farm', image: 'https://placehold.co/600x400/FFCA28/444?text=Turmeric', description: 'Vibrant yellow turmeric powder, ground from high-curcumin sundried turmeric fingers. Adds color, flavour, and health benefits.' })">
+                        <img src="https://placehold.co/600x400/FFCA28/444?text=Turmeric" alt="Turmeric Powder">
+                        <div class="product-info">
+                            <h4>Sundried Turmeric Powder</h4>
+                            <p class="product-category">Spice</p>
+                            <p class="product-farmer">Spice Routes Farm</p>
+                            <p class="product-price">₹70 / 100g</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="product-detail-view" class="hidden">
+                 <button id="back-to-products" class="btn btn-sm" onclick="showView('consumer-view', true)">← Back to Products</button>
+                 <div class="product-detail-content">
+                     <div class="product-detail-image">
+                         <img id="detail-img" src="" alt="Product Image">
+                     </div>
+                     <div class="product-detail-info">
+                         <h2 id="detail-name">Product Name</h2>
+                         <p class="detail-category" id="detail-category">Category</p>
+                         <p class="detail-price" id="detail-price">Price</p>
+                         <p class="detail-farmer">Sold by: <strong id="detail-farmer">Farmer Name</strong></p>
+                         <p class="detail-description" id="detail-description">Product description goes here...</p>
+                         <div class="detail-actions">
+                             <button class="btn btn-warning" onclick="alert('Add to Cart clicked! (Demo)')">🛒 Add to Cart</button>
+                             <button class="btn btn-info" onclick="alert('Message Farmer clicked! Feature coming soon. (Demo)')">✉️ Message Farmer</button>
+                         </div>
+                     </div>
+                 </div>
+            </section>
+
+
+            <section id="join" class="join-farmer">
+                <div class="container">
+                    <h2>Empower Your Farm with FarmDirect</h2>
+                    <p>Connect directly with consumers in your area and beyond. We provide the platform, you provide the freshness. Grow your business sustainably.</p>
+                    <ul>
+                        <li>Expand your reach instantly to a wider online customer base.</li>
+                        <li>Benefit from our transparent pricing model ensuring fair returns for your hard work.</li>
+                        <li>Access exclusive contract farming opportunities for stable income and bulk sales.</li>
+                        <li>Utilize tools like Crop Yield Prediction to optimize your planning and harvests.</li>
+                        <li>Build relationships through direct messaging and feedback from consumers.</li>
+                        <li>Simplified listing process and dedicated support for our farmer partners.</li>
+                    </ul>
+                    <button class="btn btn-lg" onclick="alert('Sign Up form would appear here! (Demo)')">Register Your Farm Today!</button>
+                </div>
+            </section>
+
+        </div>
+
+        <div id="farmer-view" class="hidden">
+             <h2>Farmer Dashboard 🧑‍🌾</h2>
+
+             <nav class="dashboard-nav">
+                <ul>
+                    <li><button class="btn btn-sm btn-warning" onclick="showDashboardContent('dashboard-overview')">📊 Overview</button></li>
+                    <li><button class="btn btn-sm" onclick="showDashboardContent('list-product')">➕ List New Product</button></li>
+                    <li><button class="btn btn-sm btn-info" onclick="showDashboardContent('predict-yield')">🌱 Predict Crop Yield</button></li>
+                    <li><button class="btn btn-sm" onclick="showDashboardContent('view-contracts')">📄 Contract Farming</button></li>
+                    <li><button class="btn btn-sm btn-secondary" onclick="showDashboardContent('my-products')">📦 My Products</button></li>
+                </ul>
+            </nav>
+
+             <div id="dashboard-area">
+
+                 <div id="dashboard-overview-content" class="dashboard-content">
+                     <h3>Farm Overview</h3>
+                     <div class="dashboard-overview">
+                         <div class="stat-card">
+                             <h4>Active Listings</h4>
+                             <div class="stat-value">12</div>
+                             <div class="stat-label">Products Online</div>
+                         </div>
+                          <div class="stat-card">
+                             <h4>Pending Orders</h4>
+                             <div class="stat-value">3</div>
+                             <div class="stat-label">Awaiting Confirmation</div>
+                         </div>
+                          <div class="stat-card">
+                             <h4>Total Sales (Month)</h4>
+                             <div class="stat-value">₹ 8,500</div>
+                             <div class="stat-label">April 2025 (Est.)</div>
+                         </div>
+                          <div class="stat-card">
+                             <h4>Active Contracts</h4>
+                             <div class="stat-value">1</div>
+                             <div class="stat-label">Bulk Buyer Agreements</div>
+                         </div>
+                     </div>
+                     <p>Welcome back! Use the navigation above to manage your FarmDirect activities.</p>
+                 </div>
+
+                 <div id="list-product-content" class="dashboard-content hidden">
+                     <h3>List a New Product</h3>
+                     <form id="list-product-form" class="list-product-form">
+                         <div class="form-group">
+                             <label for="product-name">Product Name:</label>
+                             <input type="text" id="product-name" required placeholder="e.g., Fresh Red Onions">
+                         </div>
+                         <div class="form-group">
+                             <label for="product-category-select">Category:</label>
+                             <select id="product-category-select" required>
+                                 <option value="">-- Select Category --</option>
+                                 <option value="vegetable">Vegetable</option>
+                                 <option value="fruit">Fruit</option>
+                                 <option value="grain">Grain</option>
+                                 <option value="dairy">Dairy</option>
+                                 <option value="spice">Spice</option>
+                                 <option value="other">Other</option>
+                             </select>
+                         </div>
+                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                             <div class="form-group">
+                                <label for="product-price-input">Price (₹):</label>
+                                <input type="number" id="product-price-input" required min="1" placeholder="e.g., 30">
+                             </div>
+                              <div class="form-group">
+                                <label for="product-unit">Per Unit:</label>
+                                <input type="text" id="product-unit" required placeholder="e.g., kg, piece, litre">
+                             </div>
+                              <div class="form-group">
+                                <label for="product-quantity">Quantity Available:</label>
+                                <input type="number" id="product-quantity" required min="1" placeholder="e.g., 50">
+                             </div>
+                         </div>
+                         <div class="form-group">
+                             <label for="product-description">Description:</label>
+                             <textarea id="product-description" rows="4" placeholder="Describe your product, its quality, origin, etc."></textarea>
+                         </div>
+                         <div class="form-group">
+                            <label for="product-image">Upload Product Image:</label>
+                            <input type="file" id="product-image" accept="image/*">
+                         </div>
+                         <button type="submit" class="btn">List This Product</button>
+                     </form>
+                 </div>
+
+                <div id="predict-yield-content" class="dashboard-content hidden">
+                     <h3>AI Crop Yield Prediction Tool (Beta)</h3>
+                     <p>Get an estimate based on your inputs. Accuracy depends on data quality.</p>
+                     <form id="ai-prediction-form-farmer" class="prediction-form">
+                        <div class="form-group"><label for="location-f">Location (Village/Area):</label><input type="text" id="location-f" required placeholder="e.g., Gopali near Kharagpur"></div>
+                        <div class="form-group"><label for="crop-f">Crop Type:</label><select id="crop-f" required><option value="">-- Select Crop --</option><option value="rice_kharif">Rice (Kharif)</option><option value="rice_rabi">Rice (Rabi)</option><option value="wheat">Wheat</option><option value="maize">Maize</option><option value="potato">Potato</option><option value="mustard">Mustard</option><option value="tomato">Tomato</option></select></div>
+                        <div class="form-group"><label for="soil-f">Dominant Soil Type:</label><select id="soil-f" required><option value="">-- Select Soil --</option><option value="alluvial_gangetic">Alluvial (Gangetic)</option><option value="laterite_red">Laterite/Red</option><option value="sandy_loam">Sandy Loam</option><option value="clayey">Clayey</option></select></div>
+                        <div class="form-group"><label for="area-f">Area (Acres):</label><input type="number" id="area-f" min="0.1" step="0.1" required placeholder="e.g., 2.5"></div>
+                        <button type="submit" class="btn btn-info">Predict Yield</button>
+                    </form>
+                    <div id="prediction-output-farmer" class="prediction-result">Enter details above to get prediction...</div>
+                </div>
+
+                 <div id="view-contracts-content" class="dashboard-content hidden">
+                      <h3>Contract Farming Opportunities</h3>
+                      <p>Connect with verified bulk buyers for guaranteed sales contracts.</p>
+                       <div style="background-color: var(--light-gray); padding: 1rem; border-radius: var(--border-radius); margin-top: 1rem;">
+                        <h4>Available Contract Example:</h4>
+                        <p><strong>Buyer:</strong> Regional Restaurant Chain <br>
+                           <strong>Crop Needed:</strong> Premium Quality Onions <br>
+                           <strong>Quantity:</strong> 500 kg / month <br>
+                           <strong>Price Offered:</strong> ₹25 / kg (Grade A) <br>
+                           <strong>Duration:</strong> 6 Months
+                        </p>
+                        <button class="btn btn-sm btn-success" style="margin-top: 0.5rem;" onclick="alert('Apply to Contract clicked! (Demo)')">Apply Now</button>
+                       </div>
+                      <p style="margin-top: 1rem;"><em>More available contracts would be listed here. You can also manage your applications and active agreements.</em></p>
+                 </div>
+
+                 <div id="my-products-content" class="dashboard-content hidden">
+                      <h3>Your Active Listings</h3>
+                      <p>Manage pricing, quantity, and availability of your products.</p>
+                      <div style="border: 1px solid var(--medium-gray); padding: 1rem; border-radius: var(--border-radius); margin-top: 1rem;">
+                         <h4 style="margin-bottom: 0.5rem;">Organic Tomatoes</h4>
+                         <p><strong>Status:</strong> Online | <strong>Price:</strong> ₹55 / kg | <strong>Available:</strong> 35 kg</p>
+                         <button class="btn btn-sm btn-secondary" onclick="alert('Edit Product clicked! (Demo)')">Edit</button>
+                         <button class="btn btn-sm btn-danger" style="margin-left: 0.5rem;" onclick="alert('Remove Product clicked! (Demo)')">Remove</button>
+                      </div>
+                       <div style="border: 1px solid var(--medium-gray); padding: 1rem; border-radius: var(--border-radius); margin-top: 1rem;">
+                         <h4 style="margin-bottom: 0.5rem;">Aged Basmati Rice</h4>
+                         <p><strong>Status:</strong> Online | <strong>Price:</strong> ₹95 / kg | <strong>Available:</strong> 150 kg</p>
+                         <button class="btn btn-sm btn-secondary" onclick="alert('Edit Product clicked! (Demo)')">Edit</button>
+                         <button class="btn btn-sm btn-danger" style="margin-left: 0.5rem;" onclick="alert('Remove Product clicked! (Demo)')">Remove</button>
+                      </div>
+                      <p style="margin-top: 1rem;"><em>All your other active products would appear here.</em></p>
+                 </div>
+
+             </div>
+
+        </div>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 FarmDirect Marketplace. Connecting Kharagpur's Farms to You.</p>
+             <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact Us</a></p>
+        </div>
+    </footer>
+
+    <script>
+        const consumerView = document.getElementById('consumer-view');
+        const farmerView = document.getElementById('farmer-view');
+        const productListingSection = document.getElementById('products-section');
+        const productListingGrid = document.getElementById('product-listing');
+        const productDetailView = document.getElementById('product-detail-view');
+        const farmerLoginToggle = document.getElementById('farmer-login-toggle');
+        const dashboardArea = document.getElementById('dashboard-area');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const pincodeInput = document.getElementById('pincode-input');
+        const pincodeCheckBtn = document.getElementById('pincode-check-btn');
+
+        let isFarmerLoggedIn = false;
+
+        function showView(viewId, showProductList = false) {
+            consumerView.classList.add('hidden');
+            farmerView.classList.add('hidden');
+            productListingSection.classList.add('hidden');
+            productDetailView.classList.add('hidden');
+
+
+            if (viewId === 'consumer-view') {
+                consumerView.classList.remove('hidden');
+                 if (showProductList) {
+                      productListingSection.classList.remove('hidden');
+                 } else {
+                     productListingSection.classList.remove('hidden');
+                 }
+
+            } else if (viewId === 'farmer-view') {
+                farmerView.classList.remove('hidden');
+                showDashboardContent('dashboard-overview');
+
+            } else if (viewId === 'product-detail-view') {
+                consumerView.classList.remove('hidden');
+                productListingSection.classList.add('hidden');
+                productDetailView.classList.remove('hidden');
+            }
+        }
+
+
+        function showProductDetail(product) {
+            document.getElementById('detail-img').src = product.image;
+            document.getElementById('detail-img').alt = product.name;
+            document.getElementById('detail-name').textContent = product.name;
+            document.getElementById('detail-category').textContent = product.category;
+            document.getElementById('detail-price').textContent = product.price;
+            document.getElementById('detail-farmer').textContent = product.farmer;
+            document.getElementById('detail-description').textContent = product.description;
+            showView('product-detail-view');
+            window.scrollTo(0, 0);
+        }
+
+
+        function filterProducts(category) {
+            const products = productListingGrid.querySelectorAll('.product-card');
+            categoryButtons.forEach(btn => btn.classList.remove('active'));
+            const activeButton = document.querySelector(`.category-btn[onclick="filterProducts('${category}')"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+
+            products.forEach(product => {
+                if (category === 'all' || product.getAttribute('data-category') === category) {
+                    product.classList.remove('hidden');
+                } else {
+                    product.classList.add('hidden');
+                }
+            });
+             showView('consumer-view', true);
+        }
+
+
+        if (pincodeCheckBtn) {
+            pincodeCheckBtn.addEventListener('click', () => {
+                const pincode = pincodeInput.value.trim();
+                if (pincode.match(/^\d{6}$/)) {
+                    const availablePincodes = ['721301', '721302', '721305', '700001', '713343'];
+                    if (availablePincodes.includes(pincode)) {
+                         alert(`✅ Great! Delivery is available to pincode ${pincode}.`);
+                    } else {
+                         alert(`❌ Sorry, delivery is currently unavailable for pincode ${pincode}. Check back later!`);
+                    }
+                } else {
+                    alert('⚠️ Please enter a valid 6-digit Indian pincode.');
+                }
+            });
+        }
+
+
+         if (farmerLoginToggle) {
+             farmerLoginToggle.addEventListener('click', () => {
+                 isFarmerLoggedIn = !isFarmerLoggedIn;
+                 if (isFarmerLoggedIn) {
+                     showView('farmer-view');
+                     farmerLoginToggle.textContent = 'Logout';
+                     farmerLoginToggle.classList.remove('btn-secondary');
+                     farmerLoginToggle.classList.add('btn-danger');
+                 } else {
+                     showView('consumer-view', true);
+                     farmerLoginToggle.textContent = 'Farmer Login';
+                     farmerLoginToggle.classList.remove('btn-danger');
+                     farmerLoginToggle.classList.add('btn-secondary');
+                 }
+             });
+         }
+
+
+        function showDashboardContent(contentId) {
+            const contentAreas = dashboardArea.querySelectorAll('.dashboard-content');
+            contentAreas.forEach(area => area.classList.add('hidden'));
+
+            const areaToShow = document.getElementById(contentId + '-content');
+            const welcomeArea = document.getElementById('dashboard-overview-content');
+
+            if (areaToShow) {
+                 areaToShow.classList.remove('hidden');
+            } else if(contentId === 'dashboard-overview') {
+                 welcomeArea.classList.remove('hidden');
+            } else {
+                 console.warn("Dashboard content not found:", contentId);
+                 welcomeArea.classList.remove('hidden');
+                 welcomeArea.querySelector('p').textContent = "Selected feature area could not be loaded.";
+            }
+        }
+
+
+        const listProductForm = document.getElementById('list-product-form');
+        if (listProductForm) {
+            listProductForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('✅ Product listed successfully! (Demo)');
+                listProductForm.reset();
+                showDashboardContent('my-products');
+            });
+        }
+
+
+
+        const predictionFormFarmer = document.getElementById('ai-prediction-form-farmer');
+        const predictionOutputFarmer = document.getElementById('prediction-output-farmer');
+
+        if (predictionFormFarmer) {
+            predictionFormFarmer.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const area = document.getElementById('area-f').value;
+                const crop = document.getElementById('crop-f').value;
+
+                if (!area || !crop) {
+                    predictionOutputFarmer.textContent = '⚠️ Please fill in all required fields.';
+                    predictionOutputFarmer.style.color = '#orange';
+                    return;
+                }
+                predictionOutputFarmer.innerHTML = '⏳ Calculating prediction...';
+                predictionOutputFarmer.style.color = '#333';
+
+                setTimeout(() => {
+                    const estimatedYield = (parseFloat(area) * (Math.random() * 8 + 3)).toFixed(1);
+                    const selectedCropText = document.getElementById('crop-f').selectedOptions[0].text;
+                    predictionOutputFarmer.textContent = `✅ Estimated Yield for ${selectedCropText}: ${estimatedYield} Tonnes (Demo Result)`;
+                    predictionOutputFarmer.style.color = 'var(--primary-dark)';
+                }, 1800);
+            });
+        }
+
+
+         document.addEventListener('DOMContentLoaded', () => {
+             showView('consumer-view', true);
+             filterProducts('all');
+         });
+
+    </script>
+
+</body>
+</html>
